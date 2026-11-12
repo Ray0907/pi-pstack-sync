@@ -1,0 +1,10 @@
+{
+  "name": "pi-pstack-sync",
+  "version": "0.1.0",
+  "description": "Run Cursor's pstack skills in pi, auto-synced from upstream, with a Cursor-to-pi adapter.",
+  "license": "MIT",
+  "keywords": ["pi-package", "pi", "pstack", "skills"],
+  "files": ["extensions", "README.md", "LICENSE"],
+  "pi": { "extensions": ["./extensions/index.ts"] },
+  "peerDependencies": { "@earendil-works/pi-coding-agent": "*" }
+}
