@@ -61,10 +61,33 @@ async function mirror() {
 export default function (pi: ExtensionAPI) {
   let active = false; // set once a pstack skill is used; adapter then rides every turn
 
+  const RELOAD = "pstack-reload";
+  let pending = false; // update landed while the agent was busy
+
+  pi.registerCommand(RELOAD, {
+    description: "Reload pi after a pstack update",
+    handler: async (_args, ctx) => {
+      await ctx.reload();
+    },
+  });
+  const reloadNow = () => pi.sendUserMessage("/" + RELOAD, { expandPromptTemplates: true });
+
+  pi.on("agent_settled", () => {
+    if (!pending) return;
+    pending = false;
+    reloadNow();
+  });
+
   pi.on("session_start", async (_e, ctx) => {
     active = false;
+    pending = false;
     sync()
-      .then((r) => r && ctx.ui.notify(`pstack ${r}. Run /reload to load it.`, "info"))
+      .then((r) => {
+        if (!r) return;
+        ctx.ui.notify(`pstack ${r}, reloading.`, "info");
+        if (ctx.isIdle()) reloadNow();
+        else pending = true; // reload when the current run settles, never mid-run
+      })
       .catch((e) => ctx.ui.notify(`pstack sync failed, using cached copy: ${String(e.message).split("\n")[0]}`, "warning"));
   });
 

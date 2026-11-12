@@ -2,7 +2,7 @@
 
 Runs [pstack](https://github.com/cursor/plugins/tree/main/pstack) (Cursor's engineering skills, including `/skill:poteto-mode`) in [pi](https://pi.dev), and keeps it in sync with upstream.
 
-pstack is not bundled. On start the extension clones `cursor/plugins` to `~/.pi/agent/pstack-src` and refreshes it (`git fetch --depth 1` + `git reset --hard`, so never edit it) at most every 6 hours. When upstream changes it tells you to run `/reload`.
+pstack is not bundled. On start the extension clones `cursor/plugins` to `~/.pi/agent/pstack-src` and refreshes it (`git fetch --depth 1` + `git reset --hard`, so never edit it) at most every 6 hours. When upstream changes it reloads pi for you: immediately if idle, otherwise when the current run settles.
 
 ## Install
 
